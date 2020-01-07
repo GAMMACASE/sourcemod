@@ -46,12 +46,9 @@ SMEXT_LINK(&g_MySqlDBI);
 
 bool DBI_MySQL::SDK_OnLoad(char *error, size_t maxlength, bool late)
 {
-	if (mysql_library_init(0, NULL, NULL) != 0) {
-		smutils->Format(error, maxlength, "Could not initialize MySQL client library");
-		return false;	
-	}
-	
 	dbi->AddDriver(&g_MyDriver);
+
+	my_init();
 
 	return true;
 }
@@ -59,8 +56,8 @@ bool DBI_MySQL::SDK_OnLoad(char *error, size_t maxlength, bool late)
 void DBI_MySQL::SDK_OnUnload()
 {
 	dbi->RemoveDriver(&g_MyDriver);
-
-	mysql_library_end();
+	//:TODO: is this needed?
+	//mysql_library_end();
 }
 
 const char *DBI_MySQL::GetExtensionVerString()
@@ -72,3 +69,4 @@ const char *DBI_MySQL::GetExtensionDateString()
 {
 	return SOURCEMOD_BUILD_TIME;
 }
+
